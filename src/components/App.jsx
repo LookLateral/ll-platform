@@ -72,7 +72,7 @@ class App extends React.Component {
   
   render() {
     const userState = this.props.userState;  
-    if (this.props.authState === "signedIn") {
+    //if (this.props.authState === "signedIn") {
       return (     
         <div className="App">
           <Header userState={userState} />         
@@ -81,7 +81,7 @@ class App extends React.Component {
           <Footer userState={userState} />
         </div>
       );
-    } else return null;
+    //} else return null;
   }
 }
 //export default withAuthenticator (App);

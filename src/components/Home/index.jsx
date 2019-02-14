@@ -10,7 +10,6 @@ import Button from '@material-ui/core/Button';
 //import { Auth } from 'aws-amplify';
 import BackgroundLeft from '../../shared/images/image-home-sx.jpg';
 
-//import { Slide } from 'react-slideshow-image';   DEPRECATED
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 
@@ -33,17 +32,21 @@ const styles = {
   cardContent2: { padding: 0, paddingBottom: '0px !important', height: '100%', },
   spacer: { minHeight: 100, },
   subtitle: {
-    fontSize: 40, marginBottom: 30,
+    fontSize: 36, marginBottom: 30,
     color: 'rgb(255,255,255,0.9)',   
   },
   pos: {
     fontSize: 20, color: 'rgb(255,255,255,0.6)', 
     marginBottom: 10, marginTop: 40, 
   },
-  registerButton: { textDecoration: 'none', }, 
-  register: {
+  linkAroundBtn: { textDecoration: 'none', }, 
+  borderedBtn: {
     color: '#fff', fontSize: 15, marginTop:40,
     borderStyle: 'solid', borderColor: '#fff', borderRadius: 4, border: 2,
+  },
+  fullBtn: {
+    color: '#fff', fontSize: 15, marginTop:40,
+    borderStyle: 'solid', backgroundColor: 'purple', borderRadius: 4,
   },
   spanColored: {
     fontSize: 80, padding: 20, opacity: 0.8,
@@ -64,6 +67,8 @@ const Home = (props) => {
   
     const { classes } = props;
     const { userState } = props;
+
+    console.log('checking login data\n' + JSON.stringify(userState));
     
     let categories = userState.categories.map ((category, index) => {       
       return <div key={index} style={{ height: userState.viewport.height-260 }}> 
@@ -100,81 +105,89 @@ const Home = (props) => {
 
                   
                     <Typography className={classes.subtitle}>
-                    WELCOME TO THE TOKEN HOLDERS DASHBOARD
+                        WELCOME TO THE TOKEN HOLDERS DASHBOARD
                     </Typography>            
                     
-                    { userState.userLoaded === false ? (
+                    { 
 
-                        userState.userActive === true ? null : (
+                      userState.userDenied === true ? (
+                        //not logged: login
+                        <div>
                           
-                          <div>
-                            
-                            <Typography className={classes.pos}>
-                              It seems that you didn't perform our kyc...
-                            </Typography>   
+                          <Typography className={classes.pos}>
+                            It seems that you didn't perform our kyc...<br/>
+                            If you already completed our KYC, please use the email used before.<br/>
+                            Otherwise, please follow next link to perform the process
+                          </Typography>   
+                          <br />
+                          <a 
+                            href="https://xbr.brightcoin.us/signup?coinId=fd6aa11a-2cb9-4272-b37f-9d0f0e0ab953" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className={classes.linkAroundBtn}
+                          >
+                              <Button className={classes.borderedBtn}>Look Lateral KYC</Button>
+                          </a>
+                        </div>
 
-                            <br />
-
-                            <a 
-                              href="https://xbr.brightcoin.us/signup?coinId=fd6aa11a-2cb9-4272-b37f-9d0f0e0ab953" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className={classes.registerButton}
-                            >
-                                <Button className={classes.register}>Look Lateral KYC</Button>
-                            </a>
-
-                          </div>
-                        )
-
-                    ) : (
+                      ) : null
+                    }
                       
-                      <div>
-                        <Typography className={classes.pos}>
-                          TOKENs HOLD: {userState.llToken}<br /><br />
-                          HOLDING DAYS: {holdingDays}<br /><br />
-                          LOOK SCORE: {userState.llScore}
-                        </Typography>   
-                        
-                        <br />
+                    {  
+                      userState.userLogged === false ? (
+                        //not logged: login
+                        <div>
+                            <Link className={classes.linkAroundBtn} to='/login'>
+                              <Button className={classes.fullBtn}>LOG IN</Button>
+                            </Link>
+                        </div>
+                      ) : (
 
-                        <a 
-                          href="https://www.looklateral.com/LLWhitePaper.pdf" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className={classes.registerButton}
-                        >
-                          <Button className={classes.register}>WHITE PAPER</Button>
-                        </a>
-                      </div>
+                        <div>
+                          <Typography className={classes.pos}>
+                            TOKENs HOLD: {userState.llToken}<br /><br />
+                            HOLDING DAYS: {holdingDays}<br /><br />
+                            LOOK SCORE: {userState.llScore}
+                          </Typography>   
+                          
+                          <br />
 
-                    )}              
-                    
-                    { /* <div className={classes.spacer}></div> */ }
+                          <a 
+                            href="https://www.looklateral.com/LLWhitePaper.pdf" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className={classes.linkAroundBtn}
+                          >
+                            <Button className={classes.borderedBtn}>WHITE PAPER</Button>
+                          </a>
+                        </div>
+                      )
+                    }
 
-                    { userState.llRegistered ? (
+                    {  
+                      userState.userRegistered === true ? (
                         
                         <div>
                           <Typography className={classes.pos}>
                           YOU ARE A LOOK LATERAL USER SINCE <br /> {userState.registrationDate}
                           </Typography>                                        
                         </div>
+                      
+                      ) : 
+                        userState.userLogged === true ? (
 
-                    ) : (
-
-                      userState.userActive ? (
                           <div>
                             <Typography className={classes.pos}>
                             Don't waste time, register to Look Lateral Platform
                             </Typography>                                        
                             <br />  
-                            <Link className={classes.registerButton} to='/register'>
-                              <Button className={classes.register}>REGISTER</Button>
+                            <Link className={classes.linkAroundBtn} to='/register'>
+                              <Button className={classes.borderedBtn}>REGISTER</Button>
                             </Link>
                           </div>
-                      ) : null
 
-                    )}
+                        ) : null
+                    }
                   
                 </CardContent>
               </Card>

@@ -17,7 +17,7 @@ const styles = {
 const SidebarUserDetail = (props) => {
     const { classes } = props; 
     return (
-        props.cognitoLogged ? 
+        props.userLogged ? 
         
             <div className={classes.sidebarUserDetailContainer}>
                 

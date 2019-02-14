@@ -25,7 +25,7 @@ const SidebarFastLink = (props) => {
     return (
         <div>
             { 
-            props.cognitoLogged ?  (
+            props.userLogged ?  (
                 
                 <div className={classes.fastLinkContainer}>       
                     <Link to="/" className={classes.fastLink}>

@@ -5,13 +5,14 @@ import { Route, Switch } from 'react-router-dom';
 // Components
 import App from './components/App';
 import Home from './components/Home';
+import Login from './components/Login';
 import Register from './components/Register';
 import Profile from './components/Profile';
 import Sidebar from './shared/components/layout/Sidebar';
 import Error404 from './components/Error/404';
-import { Authenticator, SignIn, ConfirmSignIn, RequireNewPassword, SignUp, ConfirmSignUp, VerifyContact, ForgotPassword, TOTPSetup } from 'aws-amplify-react';
+//import { Authenticator, SignIn, ConfirmSignIn, RequireNewPassword, SignUp, ConfirmSignUp, VerifyContact, ForgotPassword, TOTPSetup } from 'aws-amplify-react';
 
-import bg1 from './shared/images/bg-login/bg-login-01.png';
+/*import bg1 from './shared/images/bg-login/bg-login-01.png';
 import bg2 from './shared/images/bg-login/bg-login-02.png';
 import bg3 from './shared/images/bg-login/bg-login-03.png';
 import bg4 from './shared/images/bg-login/bg-login-04.png';
@@ -21,12 +22,12 @@ import bg7 from './shared/images/bg-login/bg-login-07.png';
 import bg8 from './shared/images/bg-login/bg-login-08.png';
 import bg9 from './shared/images/bg-login/bg-login-09.png';
 import bg10 from './shared/images/bg-login/bg-login-10.png';
-import bg12 from './shared/images/bg-login/bg-login-12.png';
+import bg12 from './shared/images/bg-login/bg-login-12.png';*/
 
-import { AmplifyTheme } from 'aws-amplify-react';
+//import { AmplifyTheme } from 'aws-amplify-react';
 
 import aws_exports from './aws-exports';
-import Amplify, { Auth, API } from 'aws-amplify';
+import Amplify, { /*Auth,*/ API } from 'aws-amplify';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -36,7 +37,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 Amplify.configure(aws_exports);
 library.add(fab, fas);
 
-var rand = parseInt(Math.random() * 11);
+/*var rand = parseInt(Math.random() * 11);
 var bg, bgc;
 
 switch(rand) {
@@ -93,7 +94,7 @@ const MyTheme = Object.assign( {}, AmplifyTheme, {
           sectionFooter: MySectionFooter,
           sectionFooterPrimaryContent: MySectionFooterPrimaryContent,
           sectionFooterSecondaryContent: MySectionFooterSecondaryContent,   
-});
+});*/
 
 /*const AppRoutes = () => (
   <Authenticator theme={MyTheme} hideDefault={true}>
@@ -122,41 +123,89 @@ class AppRoutes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {     
-      cognitoLogged: false, userLoaded: false, userActive: true, userType: 0,
-
+      userLogged: false, emailLogin: '', pswLogin: '', needToRenew: false, //to change temp psw
+      userLoginDatetime: false, //for session ??
+      userDenied: false, //if true he tryed to login without success
+      userLoaded: false, //after getUser()
+      
+      kycCompleted: false, kycDate: false,
+      llToken:0, llScore:0, investDate: false,
+      llRegistered: false, registrationDate: false, registrationDateUpdate: false,
+      userType: 0,
+      
       email:'', firstName:'', middleName:'', lastName:'', dateBirth:'',
       address:'', city:'', zipCode:'', regionState:'',
       countryCitizenship:'', countryResidence:'',
       occupation:'', accreditedInvestor: false,
       
-      kycCompleted: false, kycDate: false, kycDateUpdate: false,
-      llToken:0, llScore:0, investDate: false,
-      llRegistered: false, registrationDate: false, registrationDateUpdate: false,
-
       categories: [],
       viewport: { width: 0, height: 0, },
       sidebarOpened: false,
     }
     
-    this.getUser = this.getUser.bind(this);
+    //this.getUser = this.getUser.bind(this);
+    this.login = this.login.bind(this);
+    this.post = this.post.bind(this);
     this.resize = this.resize.bind(this);
     this.handleSidebar = this.handleSidebar.bind(this);
-    this.handleChangeRegistrationField = this.handleChangeRegistrationField.bind(this);
+    this.handleChangeTextField = this.handleChangeTextField.bind(this);
+    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     this.handleRegistrationSubmit = this.handleRegistrationSubmit.bind(this);
   }
 
-  /* 
-  ***  ZU NOTES  *** 
-  - when a user complete the brightcoin kyc we have to put his email and his amount in db
-[record to put in db: email, llToken, llScore, investDate, kycCompleted, kycDate, kyvDateUpdate]
-  - when a user register or login in cognito, we get the user from the db
-  - if email is in db he can proceed and the left message is welcome, otherwise left message "not your time"
-  - he must register, very similar to our old prekyc
-  - he can access to the platform ...
-  */
+  login = async () => {
 
-  getUser = async () => {
-    const response = await API.get('dashboardAPI', '/items/' + this.state.email);
+    if(this.state.emailLogin==='' || this.state.pswLogin===''){
+          alert('Please complete all required fields'); 
+          return false; 
+    } else {
+      
+      const response = await API.get('llplatformAPI', '/users/' + this.state.emailLogin);       
+      if(response){
+
+        /* need to find something like this in db:
+        {
+          "user_email": "simone.baroni83@gmail.com",
+          "pswLogin": "Looklateral123!",
+          "needToRenew": true,
+          "kycCompleted": true,
+          "kycDate": "2019-01-28", 
+          "llToken": 246964,
+          "investDate": "2019-01-30"
+        } */
+        
+        if(this.state.pswLogin === response[0].pswLogin){
+          
+          if(this.state.userLoaded === false) { 
+            let holdingDays = Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(response[0].investDate)) / (1000 * 60 * 60 * 24));
+            let llScore = response[0].llToken * holdingDays; 
+            if(response[0].user_email === '' || response[0].llToken === '' || response[0].investDate === '')
+              console.log('Problems in login: psw correct but missing data\n' + JSON.stringify(response));
+
+            this.setState({   
+              userLogged: true, emailLogin: '', pswLogin: '', needToRenew: response[0].needToRenew,
+              userLoginDatetime: Date('Y-m-d'), //for session ??
+              userDenied: false, //he logged in with success
+              userLoaded: response[0].llRegistered, //if registered i know is completely loaded
+              llRegistered: response[0].llRegistered || false, registrationDate: response[0].registrationDate || false, registrationDateUpdate: response[0].registrationDateUpdate || false,
+              userType: response[0].userType || 0,
+              kycCompleted: response[0].kycCompleted || false, kycDate: response[0].kycDate || false,
+              llToken: response[0].llToken, investDate: response[0].investDate, llScore: llScore,
+              email: response[0].user_email,         
+              firstName: response[0].firstName || '', middleName:response[0].middleName || '', lastName: response[0].lastName || '', dateBirth: response[0].dateBirth || '',
+              address:response[0].address || '', city:response[0].city || '', zipCode:response[0].zipCode || '', regionState:response[0].regionState || '',
+              countryCitizenship:response[0].countryCitizenship || '', countryResidence:response[0].countryResidence || '',
+              occupation:response[0].occupation || '', accreditedInvestor: response[0].accreditedInvestor || false       
+            },  function () { console.log('routes.js login:\n' + JSON.stringify(this.state)); });         
+          } 
+        } else this.setState({ userDenied: true });         
+      } else this.setState({ userDenied: false }); 
+    }
+    return true;
+  }
+
+  /*getUser = async () => {
+    const response = await API.get('llplatformAPI', '/users/' + this.state.email);
     if(response){
       if(this.state.userLoaded === false) { 
         let holdingDays = Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(response[0].investDate)) / (1000 * 60 * 60 * 24));
@@ -178,8 +227,8 @@ class AppRoutes extends React.Component {
           },  function () { console.log('routes.js getUser:\n' + JSON.stringify(this.state)); });
         }
       }
-    } else this.setState({ userActive: false });
-  }
+    } //else this.setState({ userActive: false });  
+  }*/
 
   resize = () => {
     if(this.state.viewport.width !== document.documentElement.clientWidth || this.state.viewport.height !== document.documentElement.clientHeight){
@@ -196,12 +245,21 @@ class AppRoutes extends React.Component {
     this.setState({ sidebarOpened: !this.state.sidebarOpened })
   }
 
-  handleChangeRegistrationField = name => event => { this.setState({ [name]: event.target.value }); };
+  handleChangeTextField = name => event => { this.setState({ [name]: event.target.value }); };
   
   handleRegistrationSubmit = (e) => {
     e.preventDefault();
     this.post();
     console.log('posting');
+  }
+  
+  handleLoginSubmit = (e) => {
+    e.preventDefault();
+    this.login().then( response => {
+      if(response) window.location.href = '/';
+      else console.log('error logging in')
+    });
+    //console.log('logging in');
   }
 
   post = async () => {
@@ -254,11 +312,7 @@ class AppRoutes extends React.Component {
   componentDidMount() { window.addEventListener('resize', this.resize); }
   componentWillUnmount() { window.removeEventListener('resize', this.resize); }
 
-  componentWillMount () { 
-
-    //const anonymousUser =  Auth.currentCredentials();
-    Auth.currentCredentials().then(anonymousUser => { console.log('anonymousUser\n' + JSON.stringify(anonymousUser)); })
-    
+  componentWillMount () {     
     
     /*if( this.state.email === ''){     
       Auth.currentAuthenticatedUser({
@@ -300,7 +354,7 @@ class AppRoutes extends React.Component {
   
   render() {
 
-    return (
+    /*return (
       <Authenticator theme={MyTheme} hideDefault={true}>
         <SignIn/>
         <ConfirmSignIn/>
@@ -316,7 +370,7 @@ class AppRoutes extends React.Component {
             <Route path="/" exact render={(props) => <Home userState={this.state} {...props} /> } />
             <Route path="/register" exact render={(props) => <Register 
                                                               userState={this.state} 
-                                                              handleChangeRegistrationField={this.handleChangeRegistrationField}
+                                                              handleChangeTextField={this.handleChangeTextField}
                                                               handleRegistrationSubmit={this.handleRegistrationSubmit}
                                                               {...props} /> } />
             <Route path="/profile" exact render={(props) => <Profile userState={this.state} {...props} /> } />
@@ -330,6 +384,32 @@ class AppRoutes extends React.Component {
                 /> 
         </App>
       </Authenticator>
+    )*/
+    return (
+        
+        <App userState={this.state} handleSidebar={this.handleSidebar} >
+          <Switch>
+            <Route path="/" exact render={(props) => <Home userState={this.state} {...props} /> } />
+            <Route path="/login" exact render={(props) => <Login 
+                                                              userState={this.state} 
+                                                              handleChangeTextField={this.handleChangeTextField}
+                                                              handleLoginSubmit={this.handleLoginSubmit}
+                                                              {...props} /> } />
+            <Route path="/register" exact render={(props) => <Register 
+                                                              userState={this.state} 
+                                                              handleChangeTextField={this.handleChangeTextField}
+                                                              handleRegistrationSubmit={this.handleRegistrationSubmit}
+                                                              {...props} /> } />
+            <Route path="/profile" exact render={(props) => <Profile userState={this.state} {...props} /> } />
+            <Route component={Error404} />
+          </Switch>
+
+          <Sidebar 
+                    isOpen={this.state.sidebarOpened}
+                    cognitoLogged={ this.state.cognitoLogged} 
+                    userType={ this.state.userType}
+                /> 
+        </App>
     )
   }
 }

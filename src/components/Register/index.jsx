@@ -79,7 +79,7 @@ const TextFields = (props) => {
   
   const { classes } = props;
   const { userState } = props;
-  const { handleChangeRegistrationField } = props;
+  const { handleChangeTextField } = props;
   const { handleRegistrationSubmit } = props;
 
   //console.log('checking state in register:\n' + JSON.stringify(userState));
@@ -111,7 +111,7 @@ const TextFields = (props) => {
                   label="Given Name"
                   className={classes.textField}
                   value={userState.firstName}
-                  onChange={handleChangeRegistrationField("firstName")}
+                  onChange={handleChangeTextField("firstName")}
                   margin="normal"
                 />
                 <TextField
@@ -120,7 +120,7 @@ const TextFields = (props) => {
                   label="Middle Name"
                   className={classes.textField}
                   value={userState.middleName || ''}
-                  onChange={handleChangeRegistrationField("middleName")}
+                  onChange={handleChangeTextField("middleName")}
                   margin="normal"
                 />
                 <TextField
@@ -130,7 +130,7 @@ const TextFields = (props) => {
                   label="Surname"
                   className={classes.textField}
                   value={userState.lastName}
-                  onChange={handleChangeRegistrationField("lastName")}
+                  onChange={handleChangeTextField("lastName")}
                   margin="normal"
                 />    
                 <TextField
@@ -140,7 +140,7 @@ const TextFields = (props) => {
                   label="Address"
                   className={classes.textField}
                   value={userState.address}
-                  onChange={handleChangeRegistrationField("address")}
+                  onChange={handleChangeTextField("address")}
                   margin="normal"
                 />    
                 <TextField
@@ -150,7 +150,7 @@ const TextFields = (props) => {
                   label="City"
                   className={classes.textField}
                   value={userState.city}
-                  onChange={handleChangeRegistrationField("city")}
+                  onChange={handleChangeTextField("city")}
                   margin="normal"
                 />    
                 <TextField
@@ -160,7 +160,7 @@ const TextFields = (props) => {
                   label="Zip Code"
                   className={classes.textField}
                   value={userState.zipCode}
-                  onChange={handleChangeRegistrationField("zipCode")}
+                  onChange={handleChangeTextField("zipCode")}
                   margin="normal"
                 />    
                 <TextField
@@ -170,7 +170,7 @@ const TextFields = (props) => {
                   label="Region or State"
                   className={classes.textField}
                   value={userState.regionState}
-                  onChange={handleChangeRegistrationField("regionState")}
+                  onChange={handleChangeTextField("regionState")}
                   margin="normal"
                 />    
                 <FormControl required className={classes.selectOp}><InputLabel>Country of Residence</InputLabel>
@@ -178,7 +178,7 @@ const TextFields = (props) => {
                   required
                   native
                   value={userState.countryResidence}
-                  onChange={handleChangeRegistrationField('countryResidence')}
+                  onChange={handleChangeTextField('countryResidence')}
                   inputProps={{
                     name: 'countryResidence',
                     id: 'countryResidence',
@@ -431,7 +431,7 @@ const TextFields = (props) => {
                   required
                   native
                   value={userState.countryCitizenship}
-                  onChange={handleChangeRegistrationField('countryCitizenship')}
+                  onChange={handleChangeTextField('countryCitizenship')}
                   inputProps={{
                     name: 'countryCitizenship',
                     id: 'countryCitizenship',
@@ -687,7 +687,7 @@ const TextFields = (props) => {
                   label="Date of Birth"
                   className={classes.textField}
                   value={userState.dateBirth}
-                  onChange={handleChangeRegistrationField("dateBirth")}
+                  onChange={handleChangeTextField("dateBirth")}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -700,7 +700,7 @@ const TextFields = (props) => {
                   label="Occupation"
                   className={classes.textField}
                   value={userState.occupation}
-                  onChange={handleChangeRegistrationField("occupation")}
+                  onChange={handleChangeTextField("occupation")}
                   margin="normal"
                 />     
 
@@ -743,7 +743,7 @@ const TextFields = (props) => {
                   placeholder="Are you an accredited investor (under US law parameters *) ?"
                   className={classes.group}
                   value={userState.accreditedInvestor}
-                  onChange={handleChangeRegistrationField("accreditedInvestor")}
+                  onChange={handleChangeTextField("accreditedInvestor")}
                 >
                   <FormControlLabel value="true" control={<Radio />} label="Yes" />
                   <FormControlLabel value="false" control={<Radio />} label="No" />
@@ -759,7 +759,7 @@ const TextFields = (props) => {
                   name="amount"
                   className={classes.group}
                   value={userState.amount}
-                  onChange={handleChangeRegistrationField("amount")}
+                  onChange={handleChangeTextField("amount")}
                 >
                   <FormControlLabel value="less than 5,000 usd" control={<Radio />} label="less than 5,000 usd" />
                   <FormControlLabel value="5,000 - 49,999 usd" control={<Radio />} label="5,000 - 49,999 usd" />

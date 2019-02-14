@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 import Logo from '../../images/Logo-Look-Lateral.png';
-import { Auth } from 'aws-amplify';
+//import { Auth } from 'aws-amplify';
 
 const styles = {
   root: {
@@ -56,13 +56,13 @@ const styles = {
 
 };
 
-function signOut(){
+/*function signOut(){
   console.log(Auth);
   Auth.signOut()
     .then(data => console.log(data))
     .catch(err => console.log(err));
   window.location.reload();
-}
+}*/
 
 function NavBar(props) {
   
@@ -78,7 +78,7 @@ function NavBar(props) {
             <img src={Logo} className={classes.logo} alt="LL Logo"></img> 
           </div>
           </a>
-          <Button className={classes.signout} onClick={signOut}>Sign Out</Button>
+          { /* <Button className={classes.signout} onClick={signOut}>Sign Out</Button> */ }
         </Toolbar>
       </AppBar>
     </div>
