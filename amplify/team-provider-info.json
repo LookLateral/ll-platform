@@ -9,6 +9,11 @@
             "UnauthRoleName": "ll-platform-20190214114635-unauthRole",
             "StackName": "ll-platform-20190214114635",
             "StackId": "arn:aws:cloudformation:us-west-2:804165849592:stack/ll-platform-20190214114635/cd159090-3045-11e9-9487-0211670049c0"
+        },
+        "categories": {
+            "auth": {
+                "cognitoffcac8ee": {}
+            }
         }
     }
 }

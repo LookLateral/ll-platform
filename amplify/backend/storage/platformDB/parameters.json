@@ -1,0 +1,5 @@
+{
+    "tableName": "platformDB",
+    "partitionKeyName": "user_email",
+    "partitionKeyType": "S"
+}
