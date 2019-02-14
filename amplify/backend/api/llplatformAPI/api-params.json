@@ -1,0 +1,34 @@
+{
+    "paths": [
+        {
+            "name": "/users",
+            "lambdaFunction": "llplatformLambda",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "llplatformAPI",
+    "apiName": "llplatformAPI",
+    "functionArns": [
+        {
+            "lambdaFunction": "llplatformLambda"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "ll-platform-20190214150544-authRole",
+        "unAuthRoleName": "ll-platform-20190214150544-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "llplatformLambda",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,5 @@
+{
+    "tableName": "llplatformDB",
+    "partitionKeyName": "user_email",
+    "partitionKeyType": "S"
+}
