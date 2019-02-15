@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React/*, { Component }*/ from 'react'
 import SidebarUserDetails from './SidebarUserDetails'
 import SidebarFastLinks from './SidebarFastLinks'
 import SidebarLinkList from './SidebarLinkList'

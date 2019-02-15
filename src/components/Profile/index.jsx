@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 const styles = {
-  root: { flexGrow: 1/*, marginTop: -150*/, marginBottom: 50, },
+  root: { flexGrow: 1, marginBottom: 50, },
   subtitle: {
     fontSize: 40, marginBottom: 30,
     color: '#000',   
@@ -37,7 +37,7 @@ const Profile = (props) => {
             <Button className={classes.register}>EDIT INFO</Button>
           </Link>
 
-          { userState.userType === 3 || userState.userType === 2 ? (
+          { //userState.userType === 3 || userState.userType === 2 ? (
               
               <div>
                 <Link className={classes.registerButton} to='/'>
@@ -52,7 +52,7 @@ const Profile = (props) => {
 
               </div>
 
-          ) :  null 
+          //) :  null 
           }               
         
         </div>
