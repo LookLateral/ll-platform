@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 
 const Content = props => {
   const { children } = props;
-  //const { userState } = props;
-
-  //console.log('content.js children:\n' + JSON.stringify(JSON.decycle(children)));
-  //console.log('content.js userState:\n' + JSON.stringify(JSON.decycle(userState)));
 
   return (
     <main>
       {children}
     </main>
   );
-
 };
 
 Content.propTypes = {

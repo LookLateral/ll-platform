@@ -26,7 +26,7 @@ const Sidebar = (props) => {
         
                 <SidebarUserDetails userLogged={ props.userLogged} />
 
-                <SidebarFastLinks userLogged={ props.userLogged} />
+                <SidebarFastLinks userLogged={ props.userLogged} handleLogout={props.handleLogout} />
 
                 <SidebarLinkList userLogged={ props.userLogged} userType={ props.userType} />
 

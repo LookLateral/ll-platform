@@ -23,8 +23,7 @@ const properties = {
 const WPContent = (props) => {
   
     const { classes } = props;
-    const { userState } = props;
-    
+    const { userState } = props;   
     let categories = userState.categories.map ((category, index) => {       
       return <div key={index} style={{ height: userState.viewport.height-260 }}> 
                 <img 
@@ -41,12 +40,13 @@ const WPContent = (props) => {
                 </span> 
               </div> 
     });
-
+    /* ZUNOTE: autoplay doesn't work (and error in console "Uncaught TypeError: Cannot read property '0' of undefined") because categories is empty on component did mount */
     return (  
         <Carousel autoPlay {...properties}>
             { categories }               
-        </Carousel>                 
-    )
+        </Carousel>        
+    ) 
+    
   }
   
   WPContent.propTypes = {

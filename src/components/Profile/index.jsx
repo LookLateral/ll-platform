@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import profileImg from '../../shared/images/jacopo-caracci.jpg';
 
 const styles = {
   root: { flexGrow: 1, marginBottom: 50, },
@@ -11,6 +12,18 @@ const styles = {
     fontSize: 40, marginBottom: 30,
     color: '#000',   
   },
+  boxLeft: { backgroundColor: 'purple', width: '50%', height: 'calc(100% - 150px)', position: 'absolute', left: 0,}, 
+  boxRight: { backgroundColor: 'orange', width: '50%', height: 'calc(100% - 150px)', position: 'absolute', right: 0,}, 
+
+  topArea: { width: '100%',},
+  pictureContainer: { margin: 0, width: 220, height: 220, textAlign: 'center', border: '1px solid red', },
+  resizeFitCenter: { maxWidth: '100%', maxHeight: '100%', verticalAlign: 'middle' }, 
+  infoContainer: { width: 'calc(100% - 300px)', textAlign: 'left', paddingLeft: 20, },
+  infoName: { fontSize: 40, marginBottom: 10, },
+  infoDetail: { fontSize: 20, },
+
+  bottomArea: { width: '80%', margin: '50px auto', border: '1px solid #f0f', minHeight: 100, },
+
   registerButton: { textDecoration: 'none', }, 
   register: {
     color: '#000', fontSize: 15, marginTop:40,
@@ -27,33 +40,67 @@ const Profile = (props) => {
     
         <div className={classes.root}>
       
-          <Typography className={classes.subtitle}>
-          CIAO { userState.firstName }
-          </Typography>            
+          <div className={classes.boxLeft}>
+
+              <table className={classes.topArea}>
+                <tr>
+                  <td className={classes.pictureContainer}>
+                    <img src={profileImg} className={classes.resizeFitCenter} />
+                  </td>
+
+                  <td className={classes.infoContainer}>
+                    <div className={classes.infoName}>{ userState.firstName + ' ' +  userState.lastName }</div> 
+                    <div className={classes.infoDetail}>USER TYPE: Unverified user</div>
+                    <div className={classes.infoDetail}>TOKENS HOLD: { userState.llToken }</div>
+                    <div className={classes.infoDetail}>HOLDING DAYS: { userState.investDate !== false ? Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(userState.investDate)) / (1000 * 60 * 60 * 24)) : 0 }</div>
+                    <div className={classes.infoDetail}>LOOK SCORE: { userState.llScore }</div>
+                    <div className={classes.infoDetail}>FIMART: not activated</div>
+                    <div className={classes.infoDetail}>WALLET: -</div>   
+                  </td>
+                </tr>
+              </table>
+
+              <div className={classes.bottomArea}>
+                The "Art I own" box
+              </div>
+
+              <div className={classes.bottomArea}>
+                The "My last transactions" box
+              </div>
+          </div>
+
+
+          <div className={classes.boxRight}>
+        
+            <Link className={classes.registerButton} to='/register'>
+              <Button className={classes.register}>EDIT INFO</Button>
+            </Link> 
+
+            { //userState.userType === 3 || userState.userType === 2 ? (
+                
+                <div>
+                  <Link className={classes.registerButton} to='/'>
+                    <Button className={classes.register}>UPLOAD ARTWORK</Button>
+                  </Link>  
+
+                  <br />
+
+                  <Link className={classes.registerButton} to='/'>
+                    <Button className={classes.register}>FRACT ARTWORK</Button>
+                  </Link>  
+
+                </div>
+
+            //) :  null 
+            }               
+          
+          </div>
+          
+                      
           
           <br />
 
-          <Link className={classes.registerButton} to='/register'>
-            <Button className={classes.register}>EDIT INFO</Button>
-          </Link>
-
-          { //userState.userType === 3 || userState.userType === 2 ? (
-              
-              <div>
-                <Link className={classes.registerButton} to='/'>
-                  <Button className={classes.register}>UPLOAD ARTWORK</Button>
-                </Link>  
-
-                <br />
-
-                <Link className={classes.registerButton} to='/'>
-                  <Button className={classes.register}>FRACT ARTWORK</Button>
-                </Link>  
-
-              </div>
-
-          //) :  null 
-          }               
+         
         
         </div>
     )

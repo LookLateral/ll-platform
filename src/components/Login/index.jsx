@@ -6,7 +6,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import TextField from "@material-ui/core/TextField";
 import Grid from '@material-ui/core/Grid';
-import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import BackgroundLeft from '../../shared/images/image-home-sx.jpg';
 import WPContent from '../../shared/components/layout/WPcontent';
@@ -58,6 +57,8 @@ const Login = (props) => {
     const { userState } = props;
     const { handleChangeTextField } = props;
     const { handleLoginSubmit } = props;
+    const { handleLogout } = props;
+    const { handleRenewPassword } = props;
     
     return (  
     
@@ -75,21 +76,48 @@ const Login = (props) => {
                     <Typography className={classes.titleLogin}>LOG IN</Typography>
 
                     {
-                      userState.userLogged === true ? (
+                      userState.userLogged && !userState.needToRenew ? (
 
                         <div>
                           <Typography className={classes.textLogin}>You're already logged.</Typography>
-                          <Link className={classes.linkAroundBtn} to='/logout'>
-                            <Button className={classes.fullBtn}>LOGOUT</Button>
-                          </Link>
+                          <Button className={classes.fullBtn} onClick={()=>handleLogout()}>LOGOUT</Button>
                         </div>
 
+                      ) : userState.userLogged && userState.needToRenew ? ( 
+
+                        <div>
+                          <form
+                            className={classes.container}
+                            noValidate autoComplete="on"
+                          >                       
+                            <Typography className={classes.textLogin}>You're still using the temporary password, please change it!</Typography>
+                            <TextField
+                              placeholder="Password"
+                              id="password"
+                              label="Password"
+                              className={classes.textField}
+                              value={userState.pswLogin || ''}
+                              onChange={handleChangeTextField("pswNew")}
+                              margin="normal"
+                              type="password"
+                            />
+                          </form>                            
+                          <br/><br/>
+                          <Button className={classes.fullBtn} 
+                            variant="contained" component="span"
+                            onClick={(e)=>handleRenewPassword(e)}
+                            >
+                          EDIT
+                          </Button>
+                          
+                        </div>           
+                      
                       ) : (
 
                         <div>
                           <form
                             className={classes.container}
-                            noValidate autoComplete="off"
+                            noValidate autoComplete="on"
                           >                       
                             <TextField
                               required
@@ -97,7 +125,7 @@ const Login = (props) => {
                               id="email"
                               label="Email"
                               className={classes.textField}
-                              value={userState.emailLogin}
+                              value={userState.email}
                               onChange={handleChangeTextField("email")}
                               margin="normal"
                             />

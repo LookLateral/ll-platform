@@ -16,6 +16,7 @@ const styles = {
     },
     fastLinkImage: {
         margin: '0 8px',
+        color: '#fff'
     }
 }
 
@@ -37,9 +38,7 @@ const SidebarFastLink = (props) => {
                     <Link to="/search" className={classes.fastLink}>
                         <FontAwesomeIcon icon={['fas', 'search']}  className={classes.fastLinkImage} />
                     </Link>
-                    <Link to="/logout" className={classes.fastLink}>
-                        <FontAwesomeIcon icon={['fas', 'sign-out-alt']}  className={classes.fastLinkImage} />
-                    </Link>
+                        <FontAwesomeIcon icon={['fas', 'sign-out-alt']}  className={classes.fastLinkImage} onClick={()=>props.handleLogout()} />
                 </div>
             
             ) : (
