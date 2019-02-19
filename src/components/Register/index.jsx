@@ -124,7 +124,7 @@ const TextFields = (props) => {
                   <form
                     className={classes.container}
                     noValidate
-                    autoComplete="off"
+                    autoComplete="on"
                   >
                     <TextField
                       required
@@ -160,7 +160,7 @@ const TextFields = (props) => {
                       id="address"
                       label="Address"
                       className={classes.textField}
-                      value={userState.address}
+                      value={userState.address || ''}
                       onChange={handleChangeTextField("address")}
                       margin="normal"
                     />    
@@ -169,7 +169,7 @@ const TextFields = (props) => {
                       id="city"
                       label="City"
                       className={classes.textField}
-                      value={userState.city}
+                      value={userState.city || ''}
                       onChange={handleChangeTextField("city")}
                       margin="normal"
                     />    
@@ -178,7 +178,7 @@ const TextFields = (props) => {
                       id="zipCode"
                       label="Zip Code"
                       className={classes.textField}
-                      value={userState.zipCode}
+                      value={userState.zipCode || ''}
                       onChange={handleChangeTextField("zipCode")}
                       margin="normal"
                     />    
@@ -187,7 +187,7 @@ const TextFields = (props) => {
                       id="regionState"
                       label="Region or State"
                       className={classes.textField}
-                      value={userState.regionState}
+                      value={userState.regionState || ''}
                       onChange={handleChangeTextField("regionState")}
                       margin="normal"
                     />    
@@ -701,7 +701,7 @@ const TextFields = (props) => {
                       id="dateBirth"
                       label="Date of Birth"
                       className={classes.textField}
-                      value={userState.dateBirth}
+                      value={userState.dateBirth || ''}
                       onChange={handleChangeTextField("dateBirth")}
                       InputLabelProps={{
                         shrink: true,
@@ -713,7 +713,7 @@ const TextFields = (props) => {
                       id="occupation"
                       label="Occupation"
                       className={classes.textField}
-                      value={userState.occupation}
+                      value={userState.occupation || ''}
                       onChange={handleChangeTextField("occupation")}
                       margin="normal"
                     />                             

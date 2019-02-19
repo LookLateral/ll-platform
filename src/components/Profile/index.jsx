@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+//import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import profileImg from '../../shared/images/jacopo-caracci.jpg';
@@ -16,7 +16,7 @@ const styles = {
   boxRight: { backgroundColor: 'orange', width: '50%', height: 'calc(100% - 150px)', position: 'absolute', right: 0,}, 
 
   topArea: { width: '100%',},
-  pictureContainer: { margin: 0, width: 220, height: 220, textAlign: 'center', border: '1px solid red', },
+  pictureContainer: { margin: 3, width: 220, height: 220, textAlign: 'center', },
   resizeFitCenter: { maxWidth: '100%', maxHeight: '100%', verticalAlign: 'middle' }, 
   infoContainer: { width: 'calc(100% - 300px)', textAlign: 'left', paddingLeft: 20, },
   infoName: { fontSize: 40, marginBottom: 10, },
@@ -43,11 +43,11 @@ const Profile = (props) => {
           <div className={classes.boxLeft}>
 
               <table className={classes.topArea}>
+              <tbody>
                 <tr>
                   <td className={classes.pictureContainer}>
                     <img src={profileImg} className={classes.resizeFitCenter} />
                   </td>
-
                   <td className={classes.infoContainer}>
                     <div className={classes.infoName}>{ userState.firstName + ' ' +  userState.lastName }</div> 
                     <div className={classes.infoDetail}>USER TYPE: Unverified user</div>
@@ -58,36 +58,42 @@ const Profile = (props) => {
                     <div className={classes.infoDetail}>WALLET: -</div>   
                   </td>
                 </tr>
+              </tbody>
               </table>
 
-              <div className={classes.bottomArea}>
-                The "Art I own" box
-              </div>
+              <Link className={classes.registerButton} to='/register'>
+                <Button className={classes.register}>EDIT INFO</Button>
+              </Link>
 
-              <div className={classes.bottomArea}>
-                The "My last transactions" box
-              </div>
           </div>
 
 
           <div className={classes.boxRight}>
         
-            <Link className={classes.registerButton} to='/register'>
-              <Button className={classes.register}>EDIT INFO</Button>
-            </Link> 
+             
 
             { //userState.userType === 3 || userState.userType === 2 ? (
                 
                 <div>
-                  <Link className={classes.registerButton} to='/'>
-                    <Button className={classes.register}>UPLOAD ARTWORK</Button>
-                  </Link>  
+
+                  <div className={classes.bottomArea}>
+                    The "Art I own" box
+                    <br /><br /><br />
+                    <Link className={classes.registerButton} to='/my-art'>
+                      <Button className={classes.register}>MY ART</Button>
+                    </Link>
+                  </div>
+                    
 
                   <br />
 
-                  <Link className={classes.registerButton} to='/'>
-                    <Button className={classes.register}>FRACT ARTWORK</Button>
-                  </Link>  
+                  <div className={classes.bottomArea}>
+                    The "Mine last transactions" box
+                    <br /><br /><br />
+                    <Link className={classes.registerButton} to='/'>
+                      <Button className={classes.register}>MY FINANCIAL</Button>
+                    </Link>  
+                  </div>
 
                 </div>
 

@@ -9,6 +9,8 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import Profile from './components/Profile';
+import MyArt from './components/MyArt';
+import UploadArtwork from './components/UploadArtwork';
 import Sidebar from './shared/components/layout/Sidebar';
 import Error404 from './components/Error/404';
 
@@ -306,6 +308,10 @@ class AppRoutes extends React.Component {
                                                               {...props} /> } />
             
             <Route path="/profile" exact render={(props) => <Profile userState={this.state} {...props} /> } />
+            
+            <Route path="/my-art" exact render={(props) => <MyArt userState={this.state} {...props} /> } />
+            
+            <Route path="/upload-artwork" exact render={(props) => <UploadArtwork userState={this.state} {...props} /> } />
             
             <Route component={Error404} />
           
