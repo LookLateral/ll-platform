@@ -50,10 +50,7 @@ const Profile = (props) => {
                   </td>
                   <td className={classes.infoContainer}>
                     <div className={classes.infoName}>{ userState.firstName + ' ' +  userState.lastName }</div> 
-                    <div className={classes.infoDetail}>USER TYPE: Unverified user</div>
-                    <div className={classes.infoDetail}>TOKENS HOLD: { userState.llToken }</div>
-                    <div className={classes.infoDetail}>HOLDING DAYS: { userState.investDate !== false ? Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(userState.investDate)) / (1000 * 60 * 60 * 24)) : 0 }</div>
-                    <div className={classes.infoDetail}>LOOK SCORE: { userState.llScore }</div>
+                    <div className={classes.infoDetail}>USER TYPE: Unverified user</div>                 
                     <div className={classes.infoDetail}>FIMART: not activated</div>
                     <div className={classes.infoDetail}>WALLET: -</div>   
                   </td>
@@ -64,6 +61,18 @@ const Profile = (props) => {
               <Link className={classes.registerButton} to='/register'>
                 <Button className={classes.register}>EDIT INFO</Button>
               </Link>
+
+              <div className={classes.bottomArea}>
+                  LOOK BOX: Looks hold, LL score, buy LOOKS btn, link to the looks page<br/> (list of all Look transactions: bought n on date x, used 1 for tag on date y, ..., also buy LOOKS!)
+                  <br />
+                  <div className={classes.infoDetail}>TOKENS HOLD: { userState.llToken }</div>
+                  <div className={classes.infoDetail}>HOLDING DAYS: { userState.investDate !== false ? Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(userState.investDate)) / (1000 * 60 * 60 * 24)) : 0 }</div>
+                  <div className={classes.infoDetail}>LOOK SCORE: { userState.llScore }</div>
+
+                  <Link className={classes.registerButton} to='/my-art'>
+                    <Button className={classes.register}>MY LOOKS HISTORY</Button>
+                  </Link>
+                </div>
 
           </div>
 
@@ -77,10 +86,10 @@ const Profile = (props) => {
                 <div>
 
                   <div className={classes.bottomArea}>
-                    The "Art I own" box
+                    My artworks (artworks i uploaded and still own some fracts)
                     <br /><br /><br />
                     <Link className={classes.registerButton} to='/my-art'>
-                      <Button className={classes.register}>MY ART</Button>
+                      <Button className={classes.register}>MY ARTWORKS</Button>
                     </Link>
                   </div>
                     
@@ -88,10 +97,10 @@ const Profile = (props) => {
                   <br />
 
                   <div className={classes.bottomArea}>
-                    The "Mine last transactions" box
+                    Balance, wallet details and My artworks portfolio (fracts i own)
                     <br /><br /><br />
                     <Link className={classes.registerButton} to='/'>
-                      <Button className={classes.register}>MY FINANCIAL</Button>
+                      <Button className={classes.register}>MY PORTFOLIO</Button>
                     </Link>  
                   </div>
 
