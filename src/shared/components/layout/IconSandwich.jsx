@@ -1,5 +1,4 @@
 import React from 'react'
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ViewHeadline from '@material-ui/icons/ViewHeadline';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';

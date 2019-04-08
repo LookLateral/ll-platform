@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Avatar from 'material-ui/Avatar'
-import Person from 'material-ui-icons/Person'
-import Button from 'material-ui/Button'
+import Avatar from '@material-ui/core/Avatar'
+import Person from '@material-ui/icons/Person'
+import Button from '@material-ui/core/Button'
 
 const styles = {
     sidebarUserDetailContainer: { textAlign: 'center', marginTop: 20, marginLeft: 20, color: '#cdcdcd !important', },
