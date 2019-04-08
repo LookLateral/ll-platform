@@ -1,5 +1,4 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,7 +8,8 @@ const styles = {
         height: 30,
         borderTop: '1px thin #555',
         textAlign: 'left',
-        padding: '10px 2px 0px 15px', 
+        padding: '25px 2px 0px 0px', 
+        marginLeft: 20,
     },
     singleLinkContainer: {
         marginTop: 20,
@@ -17,8 +17,9 @@ const styles = {
     },
     singleLink: {
         textDecoration: 'none',
-        color: '#fff',
-        fontSize: 12,
+        color: '#cdcdcd',
+        fontSize: 15,
+        fontWeight: 'smaller',
     },
     singleLinkImage: { marginRight: 5, }
 }
@@ -30,7 +31,6 @@ const SidebarSingleLink = (props) => {
         <div className={classes.sidebarSingleLink}>
 
             <Link to={props.linkto} className={classes.singleLink}>
-                <FontAwesomeIcon icon={['fas', props.icon]} className={classes.singleLinkImage} />
                 {props.name}
             </Link>       
         </div>

@@ -17,29 +17,40 @@ import Error404 from './components/Error/404';
 import aws_exports from './aws-exports';
 import Amplify, { /*Auth,*/ API } from 'aws-amplify';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fab } from '@fortawesome/free-brands-svg-icons';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-
 Amplify.configure(aws_exports);
-library.add(fab, fas);
 
 class AppRoutes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {     
-      userLogged: false, pswLogin: '', needToRenew: false, pswNew: '', //to change temp psw
-      userLoginDatetime: false, //for session ??
-      userDenied: false, //if true he tryed to login without success
-      userLoaded: false, //after getUser()      
-      kycCompleted: false, kycDate: false,
-      llToken:0, llScore:0, investDate: false,
-      llRegistered: false, registrationDate: false, registrationDateUpdate: false,
-      userType: 0,      
-      email:'', firstName:'', middleName:'', lastName:'', dateBirth:'',
-      address:'', city:'', zipCode:'', regionState:'',
-      countryCitizenship:'', countryResidence:'',
-      occupation:'',    
+
+      // User state flags
+      userLogged: false, userLoaded: false,
+      userLoginDatetime: null,
+      needToRenewPsw: false, pswToRenew: null,
+
+      // user model in db
+      email:null, pswLogin: null,           
+          
+      userRegistered: false, 
+      userFullyRegistered: false,
+      registrationDate: null, 
+      registrationDateUpdate: null,
+  
+      userType: 0, 
+      investorStatus: false, 
+      userCanUpload: false,   
+      userFimartActive: false,   
+      llToken:0, llScore:0, investDate: null,
+      userPublicKey: null, userPrivateKey: null,
+
+      firstName:null, middleName:null, lastName:null, 
+      dateBirth:null,
+      address:null, city:null, zipCode:null, 
+      regionState:null, countryCitizenship:null, countryResidence:null,
+      occupation:null,    
+      
+      // useful stuff
       categories: [],
       viewport: { width: 0, height: 0, },
       sidebarOpened: false,
@@ -47,7 +58,7 @@ class AppRoutes extends React.Component {
     
     //this.getUser = this.getUser.bind(this);
     //this.login = this.login.bind(this);
-    //this.post = this.post.bind(this);
+    //this.register = this.register.bind(this);
     //this.renewPassword = this.renewPassword.bind(this);
     //this.resize = this.resize.bind(this);
     this.handleSidebar = this.handleSidebar.bind(this);
@@ -77,50 +88,46 @@ class AppRoutes extends React.Component {
 
   login = async () => {
 
-    if(this.state.email==='' || this.state.pswLogin===''){
+    if(this.state.email===null || this.state.pswLogin===null){
           alert('Please complete all required fields'); 
           return false; 
     } else {
       
       const response = await API.get('llplatformAPI', '/users/' + this.state.email);   
       if(!isEmpty(response)){
-
-        /* ZUNOTE: need to find something like this in db:
-        {
-          "user_email": "simone.baroni83@gmail.com",
-          "pswLogin": "Looklateral123!",
-          "needToRenew": true,
-          "kycCompleted": true,
-          "kycDate": "2019-01-28", 
-          "llToken": 246964,
-          "investDate": "2019-01-30",
-          "userType": 1
-        } */
-        
+ 
         if(this.state.pswLogin === response[0].pswLogin){
           
           if(this.state.userLoaded === false) { 
-            let holdingDays = Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(response[0].investDate)) / (1000 * 60 * 60 * 24));
-            let llScore = response[0].llToken * holdingDays; 
-            if(response[0].user_email === '' || response[0].llToken === '' || response[0].investDate === '')
+      
+            if(response[0].user_email === '')
               console.log('Problems in login: psw correct but missing data\n' + JSON.stringify(response));
 
-            this.setState({   
-              userLogged: true, pswLogin: this.state.pswLogin, needToRenew: response[0].needToRenew,
-              userLoginDatetime: Date('Y-m-d'), //for session ??
-              userDenied: false, //he logged in with success
-              userLoaded: response[0].llRegistered, //if registered i know is "completely" loaded
-              llRegistered: response[0].llRegistered || false, registrationDate: response[0].registrationDate || false, registrationDateUpdate: response[0].registrationDateUpdate || false,
-              userType: response[0].userType || 1,
-              kycCompleted: response[0].kycCompleted || false, kycDate: response[0].kycDate || false,
-              llToken: response[0].llToken, investDate: response[0].investDate, llScore: llScore,
-              email: response[0].user_email,         
-              firstName: response[0].firstName || '', middleName:response[0].middleName || '', lastName: response[0].lastName || '', dateBirth: response[0].dateBirth || '',
-              address:response[0].address || '', city:response[0].city || '', zipCode:response[0].zipCode || '', regionState:response[0].regionState || '',
-              countryCitizenship:response[0].countryCitizenship || '', countryResidence:response[0].countryResidence || '',
-              occupation:response[0].occupation || ''      
+            this.setState({                  
+              email: response[0].user_email, pswLogin: this.state.pswLogin,                     
+              userLogged: true, 
+              //needToRenewPsw: false, pswToRenew: null,
+              userLoginDatetime: Date('Y-m-d h:m:s'),
+              userLoaded: true,
+              userRegistered: response[0].userRegistered || false, 
+              userFullyRegistered: response[0].userFullyRegistered || false,
+              registrationDate: response[0].registrationDate || null, 
+              registrationDateUpdate: response[0].registrationDateUpdate || null, 
+
+              userType: response[0].userType || 0, 
+              investorStatus: response[0].investorStatus || null, 
+              userCanUpload: response[0].userCanUpload || false,   
+              userFimartActive: response[0].userFimartActive || false,   
+              llToken:response[0].llToken || 0, llScore:response[0].llScore || 0, 
+              investDate: response[0].investDate || null,
+              userPublicKey: response[0].userPublicKey || null, userPrivateKey: response[0].userPrivateKey || null,
+
+              firstName:response[0].firstName || null, middleName:response[0].middleName || null, lastName:response[0].lastName || null,
+              address:response[0].address || null, city:response[0].city || null, zipCode:response[0].zipCode || null, regionState:response[0].regionState || null,
+              countryCitizenship:response[0].countryCitizenship || null, countryResidence:response[0].countryResidence || null,
+              dateBirth:response[0].dateBirth || null, occupation:response[0].occupation || null
             },  function () { 
-              //console.log('routes.js login:\n' + JSON.stringify(this.state)); 
+              console.log('routes.js login:\n' + JSON.stringify(this.state)); 
             });         
           } 
         } else { alert('Wrong Password'); this.setState({ userDenied: true }); return false; }  
@@ -132,57 +139,44 @@ class AppRoutes extends React.Component {
   handleLogout = () => {
     sessionStorage.removeItem("ll_user_email");
     this.setState({   
-      userLogged: false, pswLogin: '', needToRenew: false, userLoginDatetime: false, 
-      userDenied: false, userLoaded: false,     
-      kycCompleted: false, kycDate: false,
-      llToken:0, llScore:0, investDate: false,
-      llRegistered: false, registrationDate: false, registrationDateUpdate: false, userType: 0,      
-      email:'', firstName:'', middleName:'', lastName:'', dateBirth:'',
-      address:'', city:'', zipCode:'', regionState:'',
-      countryCitizenship:'', countryResidence:'',  occupation:''      
+      userLogged: false, 
+      email:null, pswLogin: null, 
+      needToRenewPsw: false, pswToRenew: null,
+      userLoginDatetime: false,
+      userLoaded: false,    
+      userRegistered: false, 
+      userFullyRegistered: false,
+      registrationDate: null, 
+      registrationDateUpdate: null,
+
+      userType: 0, 
+      investorStatus: false, 
+      userCanUpload: false,   
+      userFimartActive: false,   
+      llToken:0, llScore:0, investDate: null,
+      userPublicKey: null, userPrivateKey: null,
+
+      firstName:null, middleName:null, lastName:null, 
+      dateBirth:null,
+      address:null, city:null, zipCode:null, 
+      regionState:null, countryCitizenship:null, countryResidence:null,
+      occupation:null,   
+
+      sidebarOpened: false,
+
     }, function () {
       this.props.history.push('/');
     });
   }
 
-  getUser = async () => {
-    console.log('getUser from email saved in sessionStorage');
-    const response = await API.get('llplatformAPI', '/users/' + this.state.email);
-    if(response){
-      let holdingDays = Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(response[0].investDate)) / (1000 * 60 * 60 * 24));
-      let llScore = response[0].llToken * holdingDays; 
-      
-      this.setState({   
-        userLogged: true, pswLogin: response[0].pswLogin, needToRenew: response[0].needToRenew,
-        userLoginDatetime: Date('Y-m-d'), //for session ??
-        userDenied: false, //he logged in with success
-        userLoaded: response[0].llRegistered, //if registered i know is completely loaded
-        llRegistered: response[0].llRegistered || false, registrationDate: response[0].registrationDate || false, registrationDateUpdate: response[0].registrationDateUpdate || false,
-        userType: response[0].userType || 1,
-        kycCompleted: response[0].kycCompleted || false, kycDate: response[0].kycDate || false,
-        llToken: response[0].llToken, investDate: response[0].investDate, llScore: llScore,          
-        firstName: response[0].firstName, middleName:response[0].middleName, lastName: response[0].lastName, dateBirth: response[0].dateBirth,
-        address:response[0].address, city:response[0].city, zipCode:response[0].zipCode, regionState:response[0].regionState,
-        countryCitizenship:response[0].countryCitizenship, countryResidence:response[0].countryResidence,
-        occupation:response[0].occupation,      
-        
-      },  function () { 
-        //console.log('routes.js getUser:\n' + JSON.stringify(this.state)); 
-        /* ZUNOTE: need to check the getCurrentLocation and the state.. i.e. can't see profile page if not logged.. */
-        let page = window.location.href.toString().split(window.location.host)[1];
-        if( (page==='/register' || page==='/profile') && !this.state.userLogged ) window.location.href = '/login';
-      });
-    } 
-  }
-
   handleRegistrationSubmit = (e) => {
     e.preventDefault();
-    this.post();
+    this.register();
     console.log('posting registration');
   }
   
-  post = async () => {
-    if(this.state.firstName==='' || this.state.lastName===''){
+  register = async () => {
+    if(this.state.firstName===null || this.state.lastName===null || this.state.email===null || this.state.pswLogin===null){
         alert('Please complete all required fields'); 
         return false;
 
@@ -190,25 +184,36 @@ class AppRoutes extends React.Component {
       /* ZUNOTE: need to use update instead of post */
       const response = await API.post('llplatformAPI', '/users/', {
         body: {
-          user_email:this.state.email, pswLogin: this.state.pswLogin, needToRenew: this.state.needToRenew,
-          firstName:this.state.firstName || null, middleName:this.state.middleName || null, lastName:this.state.lastName || null,          
+          // only attributes in "user model in db"
+          user_email:this.state.email, pswLogin: this.state.pswLogin,          
+          userRegistered: true, 
+          userFullyRegistered: this.state.userFullyRegistered || false,
+          registrationDate: this.state.registrationDate !== null ? this.state.registrationDate : Date('Y-m-d'), 
+          registrationDateUpdate: Date('Y-m-d'), 
+
+          userType: this.state.userType || 0, 
+          investorStatus: this.state.investorStatus || false, 
+          userCanUpload: this.state.userCanUpload || false,   
+          userFimartActive: this.state.userFimartActive || false,   
+          llToken:this.state.llToken || 0, llScore:this.state.llScore || 0, 
+          investDate: this.state.investDate || null,
+          userPublicKey: this.state.userPublicKey || null, userPrivateKey: this.state.userPrivateKey || null,
+
+          firstName:this.state.firstName || null, middleName:this.state.middleName || null, lastName:this.state.lastName || null,
           address:this.state.address || null, city:this.state.city || null, zipCode:this.state.zipCode || null, regionState:this.state.regionState || null,
           countryCitizenship:this.state.countryCitizenship || null, countryResidence:this.state.countryResidence || null,
-          dateBirth:this.state.dateBirth || null, occupation:this.state.occupation || null,  
-          kycCompleted: this.state.kycCompleted, kycDate: this.state.kycDate,
-          llToken:this.state.llToken, llScore:this.state.llScore, investDate: this.state.investDate,
-          llRegistered: true, registrationDate: Date('Y-m-d'), registrationDateUpdate: Date('Y-m-d'), 
-          userType: this.state.userType 
+          dateBirth:this.state.dateBirth || null, occupation:this.state.occupation || null 
+  
         }
       });      
 
       this.setState({
-        llRegistered: true, 
-        registrationDate: Date('Y-m-d'), 
+        userRegistered: true, 
+        registrationDate: this.state.registrationDate !== null ? this.state.registrationDate : Date('Y-m-d'), 
         registrationDateUpdate: Date('Y-m-d')    
       }, function () { 
-        this.props.history.push('/'); 
-        //console.log('post response:\n' + JSON.stringify(response)); 
+        this.props.history.push('/signin'); 
+        console.log('register response:\n' + JSON.stringify(response)); 
       });
     }
   }
@@ -220,23 +225,34 @@ class AppRoutes extends React.Component {
   }
 
   renewPassword = async () => {
-    if(this.state.pswNew !== '' && this.state.pswNew !== this.state.pswLogin){
+    if(this.state.pswToRenew !== null && this.state.pswToRenew !== this.state.pswLogin){
       const response = await API.post('llplatformAPI', '/users/', {
         body: {
-          user_email:this.state.email, pswLogin: this.state.pswNew, needToRenew: false,
-          firstName:this.state.firstName || null, middleName:this.state.middleName || null, lastName:this.state.lastName || null,          
+          // only attributes in "user model in db"
+          user_email:this.state.email, pswLogin: this.state.pswToRenew,                    
+          userRegistered: this.state.userRegistered || false, 
+          userFullyRegistered: this.state.userFullyRegistered || false,
+          registrationDate: this.state.registrationDate !== null ? this.state.registrationDate : Date('Y-m-d'), 
+          registrationDateUpdate: Date('Y-m-d'), 
+
+          userType: this.state.userType || 0, 
+          investorStatus: this.state.investorStatus || false, 
+          userCanUpload: this.state.userCanUpload || false,   
+          userFimartActive: this.state.userFimartActive || false,   
+          llToken:this.state.llToken || 0, llScore:this.state.llScore || 0, 
+          investDate: this.state.investDate || null,
+          userPublicKey: this.state.userPublicKey || null, userPrivateKey: this.state.userPrivateKey || null,
+
+          firstName:this.state.firstName || null, middleName:this.state.middleName || null, lastName:this.state.lastName || null,
           address:this.state.address || null, city:this.state.city || null, zipCode:this.state.zipCode || null, regionState:this.state.regionState || null,
           countryCitizenship:this.state.countryCitizenship || null, countryResidence:this.state.countryResidence || null,
-          dateBirth:this.state.dateBirth || null, occupation:this.state.occupation || null,  
-          kycCompleted: this.state.kycCompleted, kycDate: this.state.kycDate,
-          llToken:this.state.llToken, llScore:this.state.llScore, investDate: this.state.investDate,
-          llRegistered: this.state.llRegistered, registrationDate: this.state.registrationDate, registrationDateUpdate: this.state.registrationDateUpdate, 
-          userType: this.state.userType 
+          dateBirth:this.state.dateBirth || null, occupation:this.state.occupation || null 
         }
       });      
       this.setState({
-        needToRenew: false, 
-        pswLogin: this.state.pswNew,
+        needToRenewPsw: false, 
+        pswLogin: this.state.pswToRenew,
+        pswToRenew: null,
       }, function () { this.props.history.push('/'); });
     } else {
       alert('Please fill in a valid password');
@@ -283,6 +299,49 @@ class AppRoutes extends React.Component {
       }); 
     }
   }
+
+  getUser = async () => {
+    console.log('getUser from email saved in sessionStorage');
+    const response = await API.get('llplatformAPI', '/users/' + this.state.email);
+    if(response){
+      
+      this.setState({   
+        //email:response[0].email, 
+        pswLogin: response[0].pswLogin,          
+        
+        userLogged: true, 
+        needToRenewPsw: false, pswToRenew: null,
+        userLoginDatetime: Date('Y-m-d h:m:s'),
+        userLoaded: true,
+        userRegistered: response[0].userRegistered || false, 
+        userFullyRegistered: response[0].userFullyRegistered || false,
+        registrationDate: response[0].registrationDate || null, 
+        registrationDateUpdate: response[0].registrationDateUpdate || null, 
+
+        userType: response[0].userType || 0, 
+        investorStatus: response[0].investorStatus || false, 
+        userCanUpload: response[0].userCanUpload || false,   
+        userFimartActive: response[0].userFimartActive || false,   
+        llToken:response[0].llToken || 0, llScore:response[0].llScore || 0, 
+        investDate: response[0].investDate || null,
+        userPublicKey: response[0].userPublicKey || null, userPrivateKey: response[0].userPrivateKey || null,
+
+        firstName:response[0].firstName || null, middleName:response[0].middleName || null, lastName:response[0].lastName || null,
+        address:response[0].address || null, city:response[0].city || null, zipCode:response[0].zipCode || null, regionState:response[0].regionState || null,
+        countryCitizenship:response[0].countryCitizenship || null, countryResidence:response[0].countryResidence || null,
+        dateBirth:response[0].dateBirth || null, occupation:response[0].occupation || null
+        
+      },  function () { 
+        //console.log('routes.js getUser:\n' + JSON.stringify(this.state)); 
+        /* ZUNOTE: need to check the getCurrentLocation and the state.. i.e. can't see profile page if not logged.. */
+        let page = window.location.href.toString().split(window.location.host)[1];
+        if( (page==='/signup' || page==='/profile') && !this.state.userLogged ){
+          //window.location.href = '/signin';
+          this.props.history.push('/signin');
+        }
+      });
+    } 
+  }
   
   render() {
 
@@ -293,7 +352,7 @@ class AppRoutes extends React.Component {
             
             <Route path="/" exact render={(props) => <Home userState={this.state} {...props} /> } />
             
-            <Route path="/login" exact render={(props) => <Login 
+            <Route path="/signin" exact render={(props) => <Login 
                                                               userState={this.state} 
                                                               handleChangeTextField={this.handleChangeTextField}
                                                               handleLoginSubmit={this.handleLoginSubmit}
@@ -301,7 +360,7 @@ class AppRoutes extends React.Component {
                                                               handleRenewPassword={this.handleRenewPassword}
                                                               {...props} /> } />
             
-            <Route path="/register" exact render={(props) => <Register 
+            <Route path="/signup" exact render={(props) => <Register 
                                                               userState={this.state} 
                                                               handleChangeTextField={this.handleChangeTextField}
                                                               handleRegistrationSubmit={this.handleRegistrationSubmit}
@@ -318,9 +377,7 @@ class AppRoutes extends React.Component {
           </Switch>
 
           <Sidebar 
-                    isOpen={this.state.sidebarOpened}
-                    userLogged={ this.state.userLogged} 
-                    userType={ this.state.userType}
+                    userState={this.state}
                     handleLogout={this.handleLogout}
                 /> 
         </App>

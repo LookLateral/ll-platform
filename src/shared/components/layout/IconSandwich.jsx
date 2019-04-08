@@ -1,5 +1,6 @@
 import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import ViewHeadline from '@material-ui/icons/ViewHeadline';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -19,10 +20,10 @@ const IconSandwich = (props) => {
     return (
         props.isOpen ?
         <div className={classes.iconSandwich}> 
-            <FontAwesomeIcon icon='bars' rotation={90} onClick={ props.onClick } />
+            <ViewHeadline rotation={90} onClick={ props.onClick } />
         </div> :
         <div className={classes.iconSandwich}> 
-            <FontAwesomeIcon icon='bars' onClick={ props.onClick } />
+            <ViewHeadline onClick={ props.onClick } />
         </div>               
     )
 }

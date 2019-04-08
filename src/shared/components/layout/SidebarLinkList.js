@@ -12,7 +12,8 @@ const SidebarLinkList = (props) => {
     const { classes } = props; 
     return (
         <div className={classes.sidebarLinkList}>
-            { props.userLogged && props.userType === 3 ?
+            
+            { props.userState.userLogged && props.userState.userType === 3 ?
                 <SidebarSingleLink 
                         name="SisAdmin Manager Art"
                         linkto="/admin-dashboard"
@@ -21,7 +22,7 @@ const SidebarLinkList = (props) => {
             :
                 null
             }
-            { props.userLogged && (props.userType === 3 || props.userType === 1 || props.userType === 2 ) ?
+            { props.userState.userLogged && (props.userState.userType >= 0) ?
                 <div>
                     <SidebarSingleLink 
                         name="Member Dashboard"

@@ -1,23 +1,29 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Button from 'material-ui/Button'
+
 
 const styles = {   
-    fastLinkContainer: {
-        marginTop: 20,
-        textAlign: 'center',
-    },
     fastLink: {
         textDecoration: 'none',
         cursor: 'pointer',
-        color: '#fff',
+        color: '#fff !important',
+        padding: '0 !important',
+        minWidth: '0 !important',
+        minHeight: '0 !important',
+        marginTop: '20px !important'
     },
-    fastLinkImage: {
-        margin: '0 8px',
-        color: '#fff'
-    }
+    fullBtn: {
+        fontSize: '15px !important', marginTop: '40px !important',
+        borderStyle: 'solid', borderRadius: '0px !important',
+        width: '100px !important', padding: '6px !important',
+        marginLeft: '20px !important',
+    },
+    btnblu: {
+        backgroundColor: 'blue !important', color: '#fff !important', opacity: 0.9,
+    },
 }
 
 const SidebarFastLink = (props) => {  
@@ -26,30 +32,12 @@ const SidebarFastLink = (props) => {
     return (
         <div>
             { 
-            props.userLogged ?  (
-                
-                <div className={classes.fastLinkContainer}>       
-                    <Link to="/" className={classes.fastLink}>
-                        <FontAwesomeIcon icon={['fas', 'user']}  className={classes.fastLinkImage} />
-                    </Link>
-                    <Link to="/notification" className={classes.fastLink}>
-                        <FontAwesomeIcon icon={['fas', 'bell']}  className={classes.fastLinkImage} />
-                    </Link>
-                    <Link to="/search" className={classes.fastLink}>
-                        <FontAwesomeIcon icon={['fas', 'search']}  className={classes.fastLinkImage} />
-                    </Link>
-                        <FontAwesomeIcon icon={['fas', 'sign-out-alt']}  className={classes.fastLinkImage} onClick={()=>props.handleLogout()} />
-                </div>
-            
-            ) : (
+            props.userState.userLogged ?  null : (
 
-                <div className="sidebar-fast-links">   
-                    <Link to="/login" className={classes.fastLink}>
-                        <FontAwesomeIcon icon={['fas', 'sign-in-alt']}  className={classes.fastLinkImage} />
-                    </Link>
-                    <Link to="/search" className={classes.fastLink}>
-                        <FontAwesomeIcon icon={['fas', 'search']}  className={classes.fastLinkImage} />
-                    </Link>
+                <div className="fastLink">   
+                    <Link to="/signin">
+                        <Button className={classes.fullBtn+' '+classes.btnblu}>Sign In</Button>
+                    </Link>  
                 </div>
             )}
 

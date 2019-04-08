@@ -24,11 +24,13 @@ const Sidebar = (props) => {
         props.isOpen ?
         <div className={classes.sidebar}>
         
-                <SidebarUserDetails userLogged={ props.userLogged} />
+                <SidebarUserDetails 
+                    userState={this.state}
+                    handleLogout={this.handleLogout} />
 
-                <SidebarFastLinks userLogged={ props.userLogged} handleLogout={props.handleLogout} />
+                <SidebarFastLinks userLogged={ props.userLogged} />
 
-                <SidebarLinkList userLogged={ props.userLogged} userType={ props.userType} />
+                <SidebarLinkList userState={this.state} />
 
         </div> :
         null
