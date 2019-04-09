@@ -4,15 +4,15 @@ import { Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router'
 
 // Components
-import App from './components/App';
-import Home from './components/Home';
-import Login from './components/Login';
-import Register from './components/Register';
-import Profile from './components/Profile';
-import MyArt from './components/MyArt';
-import UploadArtwork from './components/UploadArtwork';
-import Sidebar from './shared/components/layout/Sidebar';
-import Error404 from './components/Error/404';
+import App from './App';
+import Home from './core/Home';
+import Login from './auth/Login';
+import Register from './user/Register';
+import Profile from './user/Profile';
+import MyArt from './product/MyArt';
+import UploadArtwork from './product/UploadArtwork';
+import Sidebar from './components/Sidebar';
+import Error404 from './Error/404';
 
 import aws_exports from './aws-exports';
 import Amplify, { /*Auth,*/ API } from 'aws-amplify';

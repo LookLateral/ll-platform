@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 //import Button from '@material-ui/core/Button';
-import Logo from '../../images/Logo-Look-Lateral.png';
+import Logo from '../assets/images/Logo-Look-Lateral.png';
 //import { Auth } from 'aws-amplify';
 import {Link/*, withRouter*/} from 'react-router-dom'
 

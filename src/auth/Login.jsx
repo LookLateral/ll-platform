@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import TextField from "@material-ui/core/TextField";
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import BackgroundLeft from '../../shared/images/image-home-sx.jpg';
-import WPContent from '../../shared/components/layout/WPcontent';
+import BackgroundLeft from '../assets/images/image-home-sx.jpg';
+import WPContent from '../components/WPcontent';
 
 
 const styles = () => ({

@@ -4,32 +4,72 @@ import { withStyles } from '@material-ui/core/styles';
 //import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import profileImg from '../../shared/images/jacopo-caracci.jpg';
+import profileImg from '../assets/images/jacopo-caracci.jpg';
 
-const styles = {
-  root: { flexGrow: 1, marginBottom: 50, },
-  subtitle: {
-    fontSize: 40, marginBottom: 30,
-    color: '#000',   
+const styles = theme => ({
+  root: theme.mixins.gutters({
+    maxWidth: '90%',
+    margin: 'auto',
+    padding: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit * 5,
+    marginBottom: theme.spacing.unit * 5,
+  }),
+  blu: {color: 'blue',},
+  /*title: {
+    margin: `${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 2}px`,
+    color: theme.palette.protectedTitle
   },
-  boxLeft: { backgroundColor: 'purple', width: '50%', height: 'calc(100% - 150px)', position: 'absolute', left: 0,}, 
-  boxRight: { backgroundColor: 'orange', width: '50%', height: 'calc(100% - 150px)', position: 'absolute', right: 0,}, 
-
-  topArea: { width: '100%',},
-  pictureContainer: { margin: 3, width: 220, height: 220, textAlign: 'center', },
-  resizeFitCenter: { maxWidth: '100%', maxHeight: '100%', verticalAlign: 'middle' }, 
-  infoContainer: { width: 'calc(100% - 300px)', textAlign: 'left', paddingLeft: 20, },
-  infoName: { fontSize: 40, marginBottom: 10, },
-  infoDetail: { fontSize: 20, },
-
-  bottomArea: { width: '80%', margin: '50px auto', border: '1px solid #f0f', minHeight: 100, },
-
-  registerButton: { textDecoration: 'none', }, 
-  register: {
-    color: '#000', fontSize: 15, marginTop:40,
-    borderStyle: 'solid', borderColor: '#000', borderRadius: 4, border: 2,
+  stripe_connect: {
+    marginRight: '10px',
   },
-}
+  stripe_connected: {
+    verticalAlign: 'super',
+    marginRight: '10px'
+  },*/
+  spacer: { minHeight: 100, },
+  bigAvatar: { margin:20, width: 120, height: 120, },
+  bigPerson: { width: 120, height: 120, },
+  userName: {fontSize: 20, fontWeight: 600, },
+  userDetail: {fontSize: 20,},
+  fullBtn: {
+    fontSize: 12, marginTop:10,
+    borderStyle: 'solid', borderRadius: 4,
+    width: 120, padding: 5,
+  },
+  btnblu: { backgroundColor: 'blue', color: '#fff', opacity: 0.9, },
+  btngreen: { backgroundColor: 'green', color: '#fff', opacity: 0.9, },
+  btnFloat: {
+    float: 'left', marginLeft: 20,
+  },
+  boxTopRight: {
+    width:300, height:400,
+    backgroundColor: 'pink', color: 'black', 
+    margin: 'auto', fontSize: 20,
+  },
+  tblTokenTdLeft: {
+    padding: 20,
+    borderLeft: '1px solid #dedede',
+    borderTop: '1px solid #dedede', borderBottom: '1px solid #dedede',
+    fontSize: 20,
+  },
+  tblTokenTdRight: {
+    padding: 20,
+    borderRight: '1px solid #dedede',
+    borderTop: '1px solid #dedede', borderBottom: '1px solid #dedede',
+    fontWeight: 600,
+    fontSize: 20,
+  },
+  section: {},
+  sectionContainer: {},
+  sectionTitle: {
+    color: 'blue', fontSize: 22, 
+    marginLeft: 20, marginBottom: 10, 
+    fontWeight: 800,  
+  },
+  sectionText: {
+    fontSize: 20, width: '75%', float: 'left',
+  },
+})
 
 const Profile = (props) => {
   

@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import BackgroundLeft from '../../shared/images/image-home-sx.jpg';
-import WPContent from '../../shared/components/layout/WPcontent';
+import BackgroundLeft from '../assets/images/image-home-sx.jpg';
+import WPContent from '../components/WPcontent';
 
 const styles = {
   root: { flexGrow: 1, marginTop: -150 },

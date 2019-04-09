@@ -11,8 +11,8 @@ import Select from '@material-ui/core/Select';
 import Filter1 from '@material-ui/icons/Filter1';
 //import './FileUpload.css'
 import { FormControl, InputLabel } from "@material-ui/core";
-import BackgroundLeft from '../../shared/images/bg_kyc/14122018-02.JPG';
-import WPContent from '../../shared/components/layout/WPcontent';
+import BackgroundLeft from '../assets/images/image-home-sx.jpg';
+import WPContent from '../components/WPcontent';
 
 
 const styles = theme => ({
