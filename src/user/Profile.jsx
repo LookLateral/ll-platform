@@ -1,10 +1,16 @@
-import React from "react";
+import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-//import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import profileImg from '../assets/images/jacopo-caracci.jpg';
+import Avatar from '@material-ui/core/Avatar'
+import Person from '@material-ui/icons/Person'
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+//import Button from 'material-ui/Button'
+//import DeleteUser from './DeleteUser'
+//import auth from './../auth/auth-helper'
+//import {read} from './api-user.js'
+import {Redirect, Link} from 'react-router-dom'
+//import config from './../../config/config'
 
 const styles = theme => ({
   root: theme.mixins.gutters({
@@ -71,95 +77,115 @@ const styles = theme => ({
   },
 })
 
-const Profile = (props) => {
-  
-    const { classes } = props;
-    const { userState } = props;
+//const Profile = (props) => {
+class Profile extends Component {
+
+  componentDidMount() {
+    if (!this.props.userState.userLogged) {
+      return <Redirect to='/signin'/>
+    }
+  }
+
+  render(){
+    const { classes } = this.props;
+    const { userState } = this.props;
+
+   
 
     return (  
     
-        <div className={classes.root}>
-      
-          <div className={classes.boxLeft}>
-
-              <table className={classes.topArea}>
-              <tbody>
-                <tr>
-                  <td className={classes.pictureContainer}>
-                    <img src={profileImg} className={classes.resizeFitCenter} />
-                  </td>
-                  <td className={classes.infoContainer}>
-                    <div className={classes.infoName}>{ userState.firstName + ' ' +  userState.lastName }</div> 
-                    <div className={classes.infoDetail}>USER TYPE: Unverified user</div>                 
-                    <div className={classes.infoDetail}>FIMART: not activated</div>
-                    <div className={classes.infoDetail}>WALLET: -</div>   
-                  </td>
-                </tr>
-              </tbody>
-              </table>
-
-              <Link className={classes.registerButton} to='/register'>
-                <Button className={classes.register}>EDIT INFO</Button>
-              </Link>
-
-              <div className={classes.bottomArea}>
-                  LOOK BOX: Looks hold, LL score, buy LOOKS btn, link to the looks page<br/> (list of all Look transactions: bought n on date x, used 1 for tag on date y, ..., also buy LOOKS!)
-                  <br />
-                  <div className={classes.infoDetail}>TOKENS HOLD: { userState.llToken }</div>
-                  <div className={classes.infoDetail}>HOLDING DAYS: { userState.investDate !== false ? Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(userState.investDate)) / (1000 * 60 * 60 * 24)) : 0 }</div>
-                  <div className={classes.infoDetail}>LOOK SCORE: { userState.llScore }</div>
-
-                  <Link className={classes.registerButton} to='/my-art'>
-                    <Button className={classes.register}>MY LOOKS HISTORY</Button>
-                  </Link>
-                </div>
-
-          </div>
-
-
-          <div className={classes.boxRight}>
-        
-             
-
-            { //userState.userType === 3 || userState.userType === 2 ? (
-                
-                <div>
-
-                  <div className={classes.bottomArea}>
-                    My artworks (artworks i uploaded and still own some fracts)
-                    <br /><br /><br />
-                    <Link className={classes.registerButton} to='/my-art'>
-                      <Button className={classes.register}>MY ARTWORKS</Button>
-                    </Link>
-                  </div>
-                    
-
-                  <br />
-
-                  <div className={classes.bottomArea}>
-                    Balance, wallet details and My artworks portfolio (fracts i own)
-                    <br /><br /><br />
-                    <Link className={classes.registerButton} to='/'>
-                      <Button className={classes.register}>MY PORTFOLIO</Button>
-                    </Link>  
-                  </div>
-
-                </div>
-
-            //) :  null 
-            }               
-          
-          </div>
-          
+      <Paper className={classes.root} elevation={4}>
+        <table style={{width:'100%'}}>
+          <tbody>
+            <tr style={{width:'100%'}}>
+              <td style={{width:'50%'}}>         
+              
+                  <table style={{width:'100%'}}>
+                    <tbody>
+                      <tr style={{width:'100%'}}>
+                        <td style={{width:'50%'}}>
+                          <Avatar className={classes.bigAvatar}>
+                            <Person className={classes.bigPerson}/>
+                          </Avatar>
+                        </td>
+                        <td style={{width:'50%'}}>               
+                          <div className={classes.userName}>{userState.firstName}</div>
+                          <div className={classes.userDetail}>Unverified User</div>
+                          <Link to={"/user/edit/" /*+ this.state.user._id*/}>
+                            <Button className={classes.fullBtn+' '+classes.btnblu}>Edit Profile</Button>
+                          </Link>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>        
                       
-          
-          <br />
+                  <table style={{width:'90%', margin:'auto'}}>
+                    <tbody>
+                      <tr>
+                        <td className={classes.tblTokenTdLeft}>TOKEN HOLD</td>
+                        <td className={classes.tblTokenTdRight}>35425,4523</td>
+                      </tr>
+                      <tr>
+                        <td className={classes.tblTokenTdLeft}>HOLDING DAYS</td>
+                        <td className={classes.tblTokenTdRight}>10</td>
+                      </tr>
+                      <tr>
+                        <td className={classes.tblTokenTdLeft}>LOOK SCORE</td>
+                        <td className={classes.tblTokenTdRight}>354254,523</td>
+                      </tr>                    
+                    </tbody>
+                  </table>
+                   
+              </td>
+              
+              <td style={{width:'50%'}}>
+                <div className={classes.boxTopRight}>Thinking on using it for banners, calls to action or notifications..</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-         
-        
+        <div className={classes.spacer}></div>
+
+        <div className={classes.section}>
+          <div className={classes.sectionTitle}>FIMART</div>
+          <div className={classes.sectionContainer}>
+            <div className={classes.sectionText}>Activating Fimart, you will be able to sell and buy artwork's fracts and manage your financials in the <span className={classes.blu}>MY FINANCIALS</span></div>
+            <Button className={classes.fullBtn+' '+classes.btngreen+' '+classes.btnFloat}>ACTIVATE NOW</Button>
+          </div>
         </div>
+     
+        <div className={classes.spacer}></div>
+
+        <div className={classes.section}>
+          <div className={classes.sectionTitle}>MY ART</div>
+          <div className={classes.sectionContainer}>
+            <div className={classes.sectionText}>In this section lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <span className={classes.blu}>MY ART</span></div>
+            <Link to={"my-art"/*"/shops/" + this.state.shopId*/}>
+              <Button className={classes.fullBtn+' '+classes.btnblu+' '+classes.btnFloat}>MY ART</Button>
+            </Link>
+          </div>
+        </div>
+
+        <div className={classes.spacer}></div>
+
+        <div className={classes.section}>
+          <div className={classes.sectionTitle}>MY FINANCIALS</div>
+          <div className={classes.sectionContainer}>
+            <div className={classes.sectionText}>In this section lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <span className={classes.blu}>MY FINANCIALS</span></div>
+            <Link to={"/profile/financials"}>
+              <Button className={classes.fullBtn+' '+classes.btnblu+' '+classes.btnFloat}>MY FINANCIALS</Button>
+            </Link>
+          </div>
+        </div>
+
+        <div className={classes.spacer}></div>
+
+      </Paper>
+        
     )
   }
+}
   
   Profile.propTypes = {
     classes: PropTypes.object.isRequired

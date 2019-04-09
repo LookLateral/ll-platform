@@ -2,17 +2,30 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router'
+//import PrivateRoute from './auth/PrivateRoute'
 
 // Components
 import App from './App';
 import Home from './core/Home';
 import Login from './auth/Login';
 import Register from './user/Register';
-import Profile from './user/Profile';
-import MyArt from './product/MyArt';
-import UploadArtwork from './product/UploadArtwork';
+//import UploadArtwork from './product/UploadArtwork';
 import Sidebar from './components/Sidebar';
 import Error404 from './Error/404';
+import Provenance from './core/Provenance'
+import Fimart from './core/Fimart'
+import Profile from './user/Profile'
+import EditProfile from './user/EditProfile'
+import MyFinancials from './user/MyFinancials'
+//import NewShop from './shop/NewShop'
+//import MyShops from './shop/MyShops'
+//import Shop from './shop/Shop'
+import MyArt from './product/MyArt';
+import NewProduct from './product/NewProduct'
+import EditProduct from './product/EditProduct'
+import Product from './product/Product'
+import Tokenize from './product/Tokenize'
+//import StripeConnect from './user/StripeConnect'
 
 import aws_exports from './aws-exports';
 import Amplify, { /*Auth,*/ API } from 'aws-amplify';
@@ -231,14 +244,17 @@ class AppRoutes extends React.Component {
       return false;
 
     } else {    
+      //ZUNOTE: check if is first reg or the complete one
+      const userFullyRegistered = this.state.registrationDate !== null && this.state.userLoaded
+
       /* ZUNOTE: need to use update instead of post */
       const response = await API.post('llplatformAPI', '/users/', {
         body: {
           // only attributes in "user model in db"
           user_email:this.state.email, pswLogin: this.state.pswLogin,          
           userRegistered: true, 
-          userFullyRegistered: this.state.userFullyRegistered || false,
-          registrationDate: this.state.registrationDate !== null ? this.state.registrationDate : Date('Y-m-d'), 
+          userFullyRegistered: userFullyRegistered,
+          registrationDate: userFullyRegistered ? this.state.registrationDate : Date('Y-m-d'), 
           registrationDateUpdate: Date('Y-m-d'), 
 
           userType: this.state.userType || 0, 
@@ -254,15 +270,19 @@ class AppRoutes extends React.Component {
           countryCitizenship:this.state.countryCitizenship || null, countryResidence:this.state.countryResidence || null,
           dateBirth:this.state.dateBirth || null, occupation:this.state.occupation || null 
         }
-      });      
+      }
+      
+      );      
 
       this.setState({
         userRegistered: true, 
-        registrationDate: this.state.registrationDate !== null ? this.state.registrationDate : Date('Y-m-d'), 
+        userFullyRegistered: userFullyRegistered,
+        registrationDate: userFullyRegistered ? this.state.registrationDate : Date('Y-m-d'), 
         registrationDateUpdate: Date('Y-m-d')    
       }, function () { 
-        this.props.history.push('/signin'); 
-        //console.log('post response:\n' + JSON.stringify(response)); 
+        if(userFullyRegistered && this.state.userLogged) this.props.history.push('/profile'); 
+        else this.props.history.push('/signin'); 
+        console.log("Registration response:\n" + JSON.stringify(response));
       });
     }
   }
@@ -302,7 +322,10 @@ class AppRoutes extends React.Component {
         needToRenewPsw: false, 
         pswLogin: this.state.pswToRenew,
         pswToRenew: null,
-      }, function () { this.props.history.push('/'); });
+      }, function () { 
+        this.props.history.push('/');
+        console.log("renewPassword response:\n" + JSON.stringify(response));
+      });
     } else {
       alert('Please fill in a valid password');
       return false;
@@ -356,9 +379,9 @@ class AppRoutes extends React.Component {
         <App userState={this.state} handleSidebar={this.handleSidebar} >
           <Switch>
             
-            <Route path="/" exact render={(props) => <Home userState={this.state} {...props} /> } />
+            <Route exact path="/" render={(props) => <Home userState={this.state} {...props} /> } />
             
-            <Route path="/signin" exact render={(props) => <Login 
+            <Route exact path="/signin" render={(props) => <Login 
                                                               userState={this.state} 
                                                               handleChangeTextField={this.handleChangeTextField}
                                                               handleLoginSubmit={this.handleLoginSubmit}
@@ -366,18 +389,36 @@ class AppRoutes extends React.Component {
                                                               handleRenewPassword={this.handleRenewPassword}
                                                               {...props} /> } />
             
-            <Route path="/signup" exact render={(props) => <Register 
+            <Route exact path="/signup" render={(props) => <Register 
                                                               userState={this.state} 
                                                               handleChangeTextField={this.handleChangeTextField}
                                                               handleRegistrationSubmit={this.handleRegistrationSubmit}
                                                               {...props} /> } />
             
-            <Route path="/profile" exact render={(props) => <Profile userState={this.state} {...props} /> } />
+            <Route exact path="/provenance" render={(props) => <Provenance userState={this.state} {...props} /> } />
+            <Route exact path="/fimart" render={(props) => <Fimart userState={this.state} {...props} /> } />
             
-            <Route path="/my-art" exact render={(props) => <MyArt userState={this.state} {...props} /> } />
+
+            <Route exact path="/profile" render={(props) => <Profile userState={this.state} {...props} /> } />
+            <Route exact path="/user/edit" render={(props) => <EditProfile 
+                                                              userState={this.state} 
+                                                              handleChangeTextField={this.handleChangeTextField}
+                                                              handleRegistrationSubmit={this.handleRegistrationSubmit}
+                                                              {...props} /> } />
+            <Route exact path="/profile/financials" render={(props) => <MyFinancials userState={this.state} {...props} /> } />
+            {/*<Route path="/shops/:shopId" component={Shop}/>
+            <PrivateRoute path="/seller/shops" component={MyShops}/>
+            <PrivateRoute path="/seller/shop/new" component={NewShop}/>*/}
+            <Route exact path="/my-art" render={(props) => <MyArt userState={this.state} {...props} /> } />
             
-            <Route path="/upload-artwork" exact render={(props) => <UploadArtwork userState={this.state} {...props} /> } />
+    
+            {/* deprecated - to keep for imamu file-loader <Route path="/upload-artwork" exact render={(props) => <UploadArtwork userState={this.state} {...props} /> } />*/}
+            {/*Private*/}<Route exact path="/product/new" render={(props) => <NewProduct userState={this.state} {...props} /> } />
+            <Route exact path="/product/:productId" render={(props) => <Product userState={this.state} {...props} /> } />
+            <Route exact path="/product/:productId/tokenize" render={(props) => <Tokenize userState={this.state} {...props} /> } />
+            {/*Private*/}<Route exact path="/product/:productId/edit" render={(props) => <EditProduct userState={this.state} {...props} /> } />
             
+            {/* <Route path="/seller/stripe/connect" component={StripeConnect}/> */}
             <Route component={Error404} />
           
           </Switch>
