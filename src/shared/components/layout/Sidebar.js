@@ -22,11 +22,11 @@ const Sidebar = (props) => {
 
     return (
         props.isOpen ?
-        <div className={classes.sidebar}>
+        <div className={classes.sidebar}> 
         
-                <SidebarUserDetails userLogged={ props.userLogged} />
+                <SidebarUserDetails userLogged={ props.userLogged} firstName={ props.firstName} handleLogout={props.handleLogout}/>
 
-                <SidebarFastLinks userLogged={ props.userLogged} handleLogout={props.handleLogout} />
+                <SidebarFastLinks userLogged={ props.userLogged} />
 
                 <SidebarLinkList userLogged={ props.userLogged} userType={ props.userType} />
 

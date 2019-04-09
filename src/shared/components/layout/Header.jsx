@@ -6,6 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 //import Button from '@material-ui/core/Button';
 import Logo from '../../images/Logo-Look-Lateral.png';
 //import { Auth } from 'aws-amplify';
+import {Link/*, withRouter*/} from 'react-router-dom'
 
 const styles = {
   root: {
@@ -14,14 +15,15 @@ const styles = {
   grow: {
     flexGrow: 1,
   },
-  menuButton: {
+  /*menuButton: {
     marginLeft: -12,
     marginRight: 20,
-  },
+  },*/
   AppHeader: {
     height: 150,
-    backgroundColor: '#282c34',
-    opacity: 0.9,
+    //backgroundColor: '#282c34',
+    backgroundColor: 'rgb(0,0,0,0.9) !important',
+    //opacity: 0.9,
     padding: 50,
   },
 
@@ -41,7 +43,7 @@ const styles = {
     marginLeft: 'auto',
     marginRight: 'auto',
   },
-  signout: {
+  /*signout: {
     color: '#fff',
     fontSize: 14,
     borderStyle: 'solid',
@@ -52,6 +54,20 @@ const styles = {
     position: 'relative',
     right: -20,
     whiteSpace: 'nowrap'
+  },*/
+  linkMenuContainer: {
+    width: '100%',
+    marginTop: '-40px',
+  },
+  singleLinkMenu: {
+    width: '32%',
+    float: 'left',
+    textAlign: 'center',
+  },
+  linkMenu: {
+    color: 'white',
+    fontSize: 20,
+    textDecoration: 'none',
   },
 
 };
@@ -79,6 +95,26 @@ function NavBar(props) {
           </div>
           </a>
           { /* <Button className={classes.signout} onClick={signOut}>Sign Out</Button> */ }
+        </Toolbar>
+
+        <Toolbar>
+          <div className={classes.linkMenuContainer}>
+            <div className={classes.singleLinkMenu}>
+              <Link to={"/provenance"} className={classes.linkMenu}>
+                PROVENANCE
+              </Link>
+            </div>
+            <div className={classes.singleLinkMenu}>
+              <Link to={"/fimart"} className={classes.linkMenu}>
+                FIMART
+              </Link>
+            </div>
+            <div className={classes.singleLinkMenu}>
+              <a href="http://blog.looklateral.com/downloads/magazine/" className={classes.linkMenu}>
+                ART MAG
+              </a>   
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
     </div>

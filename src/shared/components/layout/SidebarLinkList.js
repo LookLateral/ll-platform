@@ -21,20 +21,22 @@ const SidebarLinkList = (props) => {
             :
                 null
             }
-            { props.userLogged && (props.userType === 3 || props.userType === 1 || props.userType === 2 ) ?
+            { props.userLogged && props.userType >= 0 ?
                 <div>
+                    {/*
                     <SidebarSingleLink 
                         name="Member Dashboard"
                         linkto="/"
-                        icon="home" />
+                        icon="home" />*/}
+                    <SidebarSingleLink 
+                        name="Member Dashboard"
+                        linkto="/profile"
+                        icon="address-card" />
                     <SidebarSingleLink 
                         name="Discover Art"
                         linkto="/provenance"
                         icon="palette" />           
-                    <SidebarSingleLink 
-                        name="Profile"
-                        linkto="/profile"
-                        icon="address-card" />
+                    
                 </div>
             :
                 null 

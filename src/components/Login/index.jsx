@@ -76,14 +76,14 @@ const Login = (props) => {
                     <Typography className={classes.titleLogin}>LOG IN</Typography>
 
                     {
-                      userState.userLogged && !userState.needToRenew ? (
+                      userState.userLogged && !userState.needToRenewPsw ? (
 
                         <div>
                           <Typography className={classes.textLogin}>You're already logged.</Typography>
                           <Button className={classes.fullBtn} onClick={()=>handleLogout()}>LOGOUT</Button>
                         </div>
 
-                      ) : userState.userLogged && userState.needToRenew ? ( 
+                      ) : userState.userLogged && userState.needToRenewPsw ? ( 
 
                         <div>
                           <form
@@ -97,7 +97,7 @@ const Login = (props) => {
                               label="Password"
                               className={classes.textField}
                               value={userState.pswLogin || ''}
-                              onChange={handleChangeTextField("pswNew")}
+                              onChange={handleChangeTextField("pswToRenew")}
                               margin="normal"
                               type="password"
                             />

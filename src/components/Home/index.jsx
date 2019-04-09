@@ -26,23 +26,43 @@ const styles = {
     height: '100%',
   },
   cardContent2: { padding: 0, paddingBottom: '0px !important', height: '100%', },
-  spacer: { minHeight: 100, },
+  spacer: { minHeight: 80, },
   subtitle: {
-    fontSize: 36, marginBottom: 30,
-    color: 'rgb(255,255,255,0.9)',   
+    fontSize: '2.0em', marginBottom: 30, lineHeight: 1,
+    color: 'rgb(255,255,255,0.9)',  
+  },
+  textNormal: {
+    fontSize: '1.5em', marginBottom: 20, fontWeight: 600,
+  },
+  blu: {
+    color: '#0000FF',   
   },
   pos: {
     fontSize: 20, color: 'rgb(255,255,255,0.6)', 
     marginBottom: 10, marginTop: 40, 
   },
-  linkAroundBtn: { textDecoration: 'none', }, 
-  borderedBtn: {
-    color: '#fff', fontSize: 15, marginTop:40,
-    borderStyle: 'solid', borderColor: '#fff', borderRadius: 4, border: 2,
-  },
   fullBtn: {
-    color: '#fff', fontSize: 15, marginTop:40,
-    borderStyle: 'solid', backgroundColor: 'purple', borderRadius: 4,
+    fontSize: '0.8em', marginTop:20,
+    borderStyle: 'solid', borderRadius: 4,
+    width: 120, padding: 6,
+  },
+  btnpurple: {
+    backgroundColor: 'purple', color: '#fff', opacity: 0.9,
+  },
+  btnblu: {
+    backgroundColor: 'blue', color: '#fff', opacity: 0.9,
+  },
+  btngreen: {
+    backgroundColor: 'green', color: '#fff', opacity: 0.9,
+  },
+  btnround: {
+    borderRadius: 16, width: 150, 
+  },
+  linkTandC: {
+    color: '#bbb5b5',
+    textDecoration: 'underline',
+    fontStyle: 'italic',
+    fontSize: '1.0em',
   },
 }
 
@@ -52,7 +72,7 @@ const Home = (props) => {
     const { userState } = props;
     
     //let llToken = userState.llToken ? userState.llToken : 0;
-    let holdingDays = userState.investDate !== false ? Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(userState.investDate)) / (1000 * 60 * 60 * 24)) : 0;
+    //let holdingDays = userState.investDate !== false ? Math.floor( (Date.parse(Date('Y-m-d')) - Date.parse(userState.investDate)) / (1000 * 60 * 60 * 24)) : 0;
     //let llScore = llToken * holdingDays; 
 
     return (  
@@ -69,81 +89,40 @@ const Home = (props) => {
 
                   
                     <Typography className={classes.subtitle}>
-                        WELCOME TO THE TOKEN HOLDERS DASHBOARD
-                    </Typography>            
+                      THE POWER OF ART<br/>FOR EVERYONE
+                    </Typography>    
+
+                    <Typography className={classes.textNormal+' '+classes.blu}>
+                      Blockchain-Powered Art
+                    </Typography>     
                     
-                    { 
-                      userState.userDenied === true ? (
-                        <div>                       
-                          <Typography className={classes.pos}>
-                            It seems that you didn't perform our kyc...<br/>
-                            If you already completed our KYC, please use the email used before.<br/>
-                            Otherwise, please follow next link to perform the process
-                          </Typography>   
-                          <br />
-                          <a 
-                            href="https://xbr.brightcoin.us/signup?coinId=fd6aa11a-2cb9-4272-b37f-9d0f0e0ab953" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className={classes.linkAroundBtn}
-                          >
-                              <Button className={classes.borderedBtn}>Look Lateral KYC</Button>
-                          </a>
-                        </div>
-                      ) : null
-                    }
+                    <div>
+                      <Link to="/how-it-works">
+                        <Button 
+                            className={classes.fullBtn+' '+classes.btngreen+' '+classes.btnround} 
+                        >How it works</Button>
+                      </Link>      
+                    </div>
                       
                     {  
                       userState.userLogged === false ? (
                         <div>
-                            <Link className={classes.linkAroundBtn} to='/login'>
-                              <Button className={classes.fullBtn}>LOG IN</Button>
+                            <Link className={classes.linkAroundBtn} to='/signin'>
+                              <Button className={classes.fullBtn+' '+classes.btnpurple}>SIGN IN</Button>
+                            </Link>
+                            <br />
+                            <Link className={classes.linkAroundBtn} to='/signup'>
+                              <Button className={classes.fullBtn+' '+classes.btnblu}>SIGN UP</Button>
                             </Link>
                         </div>
-                      ) : (
-
-                        <div>
-                          <Typography className={classes.pos}>
-                            TOKENs HOLD: {userState.llToken}<br /><br />
-                            HOLDING DAYS: {holdingDays}<br /><br />
-                            LOOK SCORE: {userState.llScore}
-                          </Typography>   
-                          
-                          <br />
-
-                          <a 
-                            href="https://www.looklateral.com/LLWhitePaper.pdf" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className={classes.linkAroundBtn}
-                          >
-                            <Button className={classes.borderedBtn}>WHITE PAPER</Button>
-                          </a>
-                        </div>
-                      )
+                      ) : null 
                     }
 
-                    {  
-                      userState.llRegistered === true ? (                      
-                        <div>
-                          <Typography className={classes.pos}>
-                          YOU ARE A LOOK LATERAL USER SINCE <br /> {userState.registrationDate}
-                          </Typography>                                        
-                        </div>
-                      
-                      ) : 
-                        userState.userLogged === true ? (
-                          <div>
-                            <Typography className={classes.pos}>
-                            Don't waste time, register to Look Lateral Platform
-                            </Typography>                                        
-                            <br />  
-                            <Link className={classes.linkAroundBtn} to='/register'>
-                              <Button className={classes.borderedBtn}>REGISTER</Button>
-                            </Link>
-                          </div>
-                        ) : null
-                    }
+                    <div style={{ marginTop: 30}}>
+                      <Link to="/terms-conditions" className={classes.linkTandC}>
+                        Terms and conditions
+                      </Link>
+                    </div>
                   
                 </CardContent>
               </Card>
